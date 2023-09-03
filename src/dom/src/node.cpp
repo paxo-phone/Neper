@@ -87,6 +87,11 @@ namespace dom
         return ( parent() != nullptr );
     }
 
+    bool Node::isRoot(void)
+    {
+        return ( ! hasParent() );
+    }
+
     // others
 
     Node* Node::root(void)

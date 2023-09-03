@@ -5,6 +5,11 @@
 #include "../include/tree.hpp"
 #include "../../utils/utils.hpp"
 
+/*
+    todo:
+    - fix the *parent font size* arg
+*/
+
 namespace styles
 {
     enum BoxSizing
@@ -53,16 +58,22 @@ namespace styles
         return abstract::LINE_NONE;
     }
 
-    double parseLength( const std::string& str /* , dom::Node* node */)
+    double parseLength( const std::string& str, double parentFontSize)
     {
         std::regex pxpattern ( "[0-9\\.]+px" );
         std::regex percentpattern ( "[0-9\\.]+%" );
-        // std::regex emPattern ( "[0-9\\.]+em" );
+        std::regex empattern ( "[0-9\\.]+em" );
         // std::regex hex24pattern 
 
         if (str == "0")
         {
             return 0;
+        }
+
+        else if( std::regex_match(str, empattern) )
+        {
+            double nem = std::stod( str.substr(0, str.size() - 2) );
+            return nem * parentFontSize;
         }
 
         else if( std::regex_match(str, percentpattern) )
@@ -82,7 +93,7 @@ namespace styles
         }
     }
 
-    double parseLineWidth( const std::string& str )
+    double parseLineWidth( const std::string& str, double parentFontSize )
     {
         if(str == "thin")
         { return LINE_THIN; }
@@ -93,7 +104,7 @@ namespace styles
         if(str == "thick")
         { return LINE_THICK; }
 
-        return parseLength(str);
+        return parseLength(str, parentFontSize);
     }
 
     abstract::color_t parseColor( const std::string& str )
@@ -270,7 +281,7 @@ namespace styles
 
             try
             {
-                double linewidth = parseLineWidth(domNode->styles["border-bottom-width"]);
+                double linewidth = parseLineWidth(domNode->styles["border-bottom-width"], 16.0);
                 root->setBorderBottomWidth(linewidth);
 
                 if(boxSizing == BORDER_BOX)
@@ -339,7 +350,7 @@ namespace styles
 
             try
             {
-                double linewidth = parseLineWidth(domNode->styles["border-left-width"]);
+                double linewidth = parseLineWidth(domNode->styles["border-left-width"], 16.0);
                 root->setBorderLeftWidth(linewidth);
 
                 if(boxSizing == BORDER_BOX)
@@ -388,7 +399,7 @@ namespace styles
 
             try
             {
-                double linewidth = parseLineWidth(domNode->styles["border-right-width"]);
+                double linewidth = parseLineWidth(domNode->styles["border-right-width"], 16.0);
                 root->setBorderRightWidth(linewidth);
 
                 if(boxSizing == BORDER_BOX)
@@ -440,7 +451,7 @@ namespace styles
 
             try
             {
-                double linewidth = parseLineWidth(domNode->styles["border-top-width"]);
+                double linewidth = parseLineWidth(domNode->styles["border-top-width"], 16.0);
                 root->setBorderTopWidth(linewidth);
                 
                 if(boxSizing == BORDER_BOX)
@@ -534,12 +545,25 @@ namespace styles
         // flex-wrap
         // float
         // font-family
-        
         // font-feature-settings
         // font-kerning
         // font-language-override
         // font-optical-sizing
+        
         // font-size
+        if( !domNode->styles["font-size"].empty() )
+        {
+            /* <length> | <percentage> */
+
+            try
+            {
+                
+                double length = parseLength(domNode->styles["font-size"], 16.0);
+                root->setFontSize(length);
+            }
+            catch(const char* e) { /* invalid length */ }
+        }
+
         // font-size-adjust
         // font-stretch
         // font-style
@@ -622,7 +646,7 @@ namespace styles
             /* <length> | <percentage> | auto */
             try
             {
-                double length = parseLength(domNode->styles["margin-bottom"]);
+                double length = parseLength(domNode->styles["margin-bottom"], 16.0);
                 root->setMarginBottom(length);
             }
             catch(const char* e) { /* invalid length */ }
@@ -638,7 +662,7 @@ namespace styles
             /* <length> | <percentage> | auto */
             try
             {
-                double length = parseLength(domNode->styles["margin-left"]);
+                double length = parseLength(domNode->styles["margin-left"], 16.0);
                 root->setMarginLeft(length);
             }
             catch(const char* e) { /* invalid length */ }
@@ -651,7 +675,7 @@ namespace styles
             /* <length> | <percentage> | auto */
             try
             {
-                double length = parseLength(domNode->styles["margin-right"]);
+                double length = parseLength(domNode->styles["margin-right"], 16.0);
                 root->setMarginRight(length);
             }
             catch(const char* e) { /* invalid length */ }
@@ -663,7 +687,7 @@ namespace styles
             /* <length> | <percentage> | auto */
             try
             {
-                double length = parseLength(domNode->styles["margin-top"]);
+                double length = parseLength(domNode->styles["margin-top"], 16.0);
                 root->setMarginTop(length);
             }
             catch(const char* e) { /* invalid length */ }
@@ -729,7 +753,7 @@ namespace styles
 
             try
             {   
-                double length = parseLength(domNode->styles["outline-offset"]);
+                double length = parseLength(domNode->styles["outline-offset"], 16.0);
                 root->setOutlineOffset(length);
             }
             catch(const char* e){ /* invalid value */}
@@ -758,7 +782,7 @@ namespace styles
 
             try
             {   
-                double length = parseLineWidth(domNode->styles["outline-width"]);
+                double length = parseLineWidth(domNode->styles["outline-width"], 16.0);
                 root->setOutlineWidth(length);
             }
             catch(const char* e){ /* invalid value */}
@@ -786,7 +810,7 @@ namespace styles
 
             try
             {
-                double length = parseLength(domNode->styles["padding-bottom"]);
+                double length = parseLength(domNode->styles["padding-bottom"], 16.0);
                 root->setPaddingBottom(length);
 
                 if(boxSizing == BORDER_BOX)
@@ -807,7 +831,7 @@ namespace styles
 
             try
             {
-                double length = parseLength(domNode->styles["padding-left"]);
+                double length = parseLength(domNode->styles["padding-left"], 16.0);
                 root->setPaddingLeft(length);
 
                 if(boxSizing == BORDER_BOX)
@@ -826,7 +850,7 @@ namespace styles
 
             try
             {
-                double length = parseLength(domNode->styles["padding-right"]);
+                double length = parseLength(domNode->styles["padding-right"], 16.0);
                 root->setPaddingRight(length);
 
                 if(boxSizing == BORDER_BOX)
@@ -845,7 +869,7 @@ namespace styles
 
             try
             {
-                double length = parseLength(domNode->styles["padding-top"]);
+                double length = parseLength(domNode->styles["padding-top"], 16.0);
                 root->setPaddingTop(length);
 
                 if(boxSizing == BORDER_BOX)

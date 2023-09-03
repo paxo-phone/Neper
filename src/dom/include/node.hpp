@@ -98,6 +98,11 @@ namespace dom
             */
             bool hasParent(void);
 
+            /*
+                Return true if the node don't have parent / is root node
+            */
+           bool isRoot(void);
+
             // others
             
             /*

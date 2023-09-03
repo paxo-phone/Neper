@@ -15,14 +15,23 @@ namespace styles
 {
     void readStyles( dom::Node* node )
     {
-        if( ! node->hasParent() )
+        if( node->hasParent() == false ) // is root
         {
             node->styles = css::initialStyles;
         }
+        else
+        {
+            readDefaultStyles( node );
+            // ...
+            inheriteStyles(node);
+        }
+
+        for(int i = 0; i < node->children(); i++)
+        {
+            readStyles(node->child(i));
+        }
+
         
-        readDefaultStyles( node );
-        // ...
-        inheriteStyles(node);
     }
 
 } // namespace styles

@@ -8,6 +8,7 @@ namespace styles
     std::vector<std::string> inheritedProperties = 
     {
         "color",
+        "font-size"
     };
 
     std::vector<std::string> nonInheritedProperties = 
@@ -79,7 +80,7 @@ namespace styles
 
             // initial and inherit keywords
 
-            dom::StyleList::iterator ite = node->styles.begin();
+            auto ite = node->styles.begin();
             
             for(; ite != node->styles.end(); ite++)
             {
@@ -96,11 +97,6 @@ namespace styles
                 }
 
             }
-        }
-
-        for(size_t i = 0; i < node->children(); i++)
-        {
-            inheriteStyles(node->child(i));
         }
 
         return;

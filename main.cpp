@@ -2,12 +2,7 @@
 #include <fstream>
 #include <string>
 
-#include "src/abstract/abstract.hpp"
-#include "src/css/css.hpp"
-#include "src/dom/dom.hpp"
-#include "src/html/html.hpp"
-#include "src/styles/styles.hpp"
-#include "src/utils/utils.hpp"
+#include "src/neper.hpp"
 
 int main(void)
 {
@@ -26,13 +21,8 @@ int main(void)
         html.append(line);
     }
 
-    dom::Node* root = html::parseHTML(html);
-    styles::readStyles(root);
-
-    abstract::Widget* tree = styles::abstractTree(root);
+    abstract::Widget* tree = buildAbstractFromHTML(html);
     std::cout << (*tree) << std::endl;
-
-    delete root;
     delete tree;
 
     return 0;

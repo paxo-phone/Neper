@@ -44,9 +44,9 @@ namespace css
         {"outline-color", "invert"},
         {"outline-offset", "0"},
         {"outline-style", "none"},
-        {"outline-width", "medium"}
+        {"outline-width", "medium"},
 
-
+        {"font-size", "16px"}
 
     };
 } // namespace css
