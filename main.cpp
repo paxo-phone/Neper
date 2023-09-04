@@ -20,9 +20,10 @@ int main(void)
     while( getline(file, line) ) {
         html.append(line);
     }
+    
 
     abstract::Widget* tree = buildAbstractFromHTML(html);
-    std::cout << (*tree) << std::endl;
+    std::cout << *tree << std::endl;
     delete tree;
 
     return 0;

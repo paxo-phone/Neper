@@ -7,6 +7,6 @@
 
 #include "include/default.hpp"
 #include "include/initial.hpp"
-#include "include/parser.hpp"
+#include "include/inline_parser.hpp"
 
 #endif /* __CSS__ */

@@ -22,8 +22,8 @@ namespace styles
         else
         {
             readDefaultStyles( node );
-            // ...
-            inheriteStyles(node);
+            readInlineStyles( node );
+            inheriteStyles( node );
         }
 
         for(int i = 0; i < node->children(); i++)

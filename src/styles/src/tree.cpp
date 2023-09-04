@@ -60,8 +60,9 @@ namespace styles
 
     double parseLength( const std::string& str, double parentFontSize)
     {
+
         std::regex pxpattern ( "[0-9\\.]+px" );
-        std::regex percentpattern ( "[0-9\\.]+%" );
+        // std::regex percentpattern ( "[0-9\\.]+%" );
         std::regex empattern ( "[0-9\\.]+em" );
         // std::regex hex24pattern 
 
@@ -76,10 +77,10 @@ namespace styles
             return nem * parentFontSize;
         }
 
-        else if( std::regex_match(str, percentpattern) )
-        {
-            return std::stod( str.substr(1, str.size() - 2) );
-        }
+        // else if( std::regex_match(str, percentpattern) )
+        // {
+        //     return std::stod( str.substr(0, str.size() - 2) );
+        // }
 
         else if( std::regex_match(str, pxpattern) )
         {
@@ -483,11 +484,7 @@ namespace styles
             try
             {
                 abstract::color_t color = parseColor(domNode->styles["color"]);
-
-                if( domNode->tag() == "text" )
-                {
-                    root->setTextColor(color);
-                }
+                root->setTextColor(color);
             }
             catch(const char* e) { /* invalid color */ }
             
